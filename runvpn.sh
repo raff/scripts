@@ -32,6 +32,7 @@ fi
 
 if [[ "$prefix" = "stop" ]]; then
   if [[ -e $pidfile ]]; then
+     echo "stopping vpn..."
      pid=`cat $pidfile`
      sudo rm -rf $pidfile
      sudo kill $pid
@@ -49,3 +50,5 @@ conf=${l[`expr $RANDOM % $n`]}
 echo "starting vpn with $conf"
 grep -v auth-user-pass $conf > /tmp/openvpn.conf
 sudo openvpn --daemon --auth-user-pass $creds --config /tmp/openvpn.conf --writepid /tmp/openvpn.pid
+sleep 1
+tail -50 /var/log/daemon.log | grep "Peer Connection Initiated with"
